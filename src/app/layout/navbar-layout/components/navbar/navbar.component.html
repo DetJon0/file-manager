@@ -1,0 +1,21 @@
+<mat-toolbar class="gap-1">
+  <!--     
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button> -->
+  <span class="me-1">File Manager</span>
+
+  @for (item of menuItems; track $index) {
+    <button
+      [routerLink]="item.link"
+      routerLinkActive="active"
+      mat-button
+      class="example-icon"
+      aria-label="Example icon-button with file icon"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
+    </button>
+  }
+  <span class="flex-grow-1"></span>
+</mat-toolbar>
