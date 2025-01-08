@@ -5,6 +5,16 @@ export const routes: Routes = [
   {
     path: '',
     component: NavbarLayoutComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        redirectTo: 'file-management',
+        pathMatch: 'full',
+      },
+      {
+        path: 'file-management',
+        loadChildren: () => import('./pages/file-management/file-management.routes'),
+      },
+    ],
   },
 ];

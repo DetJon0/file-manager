@@ -1,12 +1,84 @@
 {
-    "folders": [
-      
-    ],
-    "files": [
-      
-    ],
-    "users": [
-     { "id": 1, "name": "Admin Admin", "email": "admin@gmail.com", "password": "123456", "role": "admin" },
-     { "id": 2, "name": "User User", "email": "user@gmail.com", "password": "123456", "role": "user" }
-    ]
+  "folders": [
+    {
+      "id": "1",
+      "name": "Folder 1",
+      "folderId": "0",
+      "tags": ["tagFolder1", "tag1"]
+    },
+    {
+      "id": "2",
+      "name": "Folder 2",
+      "folderId": "0",
+      "tags": ["tagFolder2", "tag2"]
+    },
+    {
+      "id": "3",
+      "name": "Folder 1_1",
+      "folderId": "1",
+      "tags": ["tagFolder1_1", "tag1_1"]
+    },
+    {
+      "id": "4",
+      "name": "Folder 1_2",
+      "folderId": "1",
+      "tags": ["tagFolder1_2", "tag1_2"]
+    },
+    {
+      "id": "5",
+      "name": "Folder 1_1_1",
+      "folderId": "3",
+      "tags": ["tagFolder1_1_1", "tag1_1_1"]
+    }
+  ],
+  "files": [
+    {
+      "id": "1",
+      "name": "test.txt",
+      "type": "text/plain",
+      "folderId": "1",
+      "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
+      "tags": ["tagFile1", "tag1"]
+    },
+    {
+      "id": "2",
+      "name": "test.txt",
+      "type": "text/plain",
+      "folderId": "1",
+      "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
+      "tags": ["tagFile2", "tag2"]
+    },
+    {
+      "id": "3",
+      "name": "test.jpg",
+      "type": "image/jpeg",
+      "folderId": "3",
+      "content": "d29ya2luZyBvbiBiZXN0IHByYWN0aWNlcyBmb3IgcHJvamVjdCBzdHJ1Y3R1cmUNCndvcmtpbmcgb24gcHJpbWVuZyBwcm9qZWN0",
+      "tags": ["tagFile3", "tag3"]
+    },
+    {
+      "id": "4",
+      "name": "test.txt",
+      "type": "text/plain",
+      "folderId": "5",
+      "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
+      "tags": ["tagFile4", "tag4"]
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin Admin",
+      "email": "admin@gmail.com",
+      "password": "123456",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "User User",
+      "email": "user@gmail.com",
+      "password": "123456",
+      "role": "user"
+    }
+  ]
 }
