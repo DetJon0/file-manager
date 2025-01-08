@@ -1,0 +1,31 @@
+.tree-invisible {
+  display: none;
+}
+
+.tree {
+  --padding-space: 5px;
+  --trigger-btn-width: 48px;
+}
+
+.tree ul,
+.tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+/*
+   * This padding sets alignment of the nested nodes.
+   */
+.tree .mat-nested-tree-node div[role='group'] {
+  padding-left: var(--padding-space);
+}
+
+/*
+   * Padding for leaf nodes.
+   * Leaf nodes need to have padding so as to align with other non-leaf nodes
+   * under the same parent.
+   */
+.tree div[role='group'] > .mat-nested-tree-node {
+  padding-left: calc(var(--trigger-btn-width) + var(--padding-space));
+}

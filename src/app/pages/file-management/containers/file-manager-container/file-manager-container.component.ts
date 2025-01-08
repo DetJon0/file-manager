@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PageTitleComponent } from '../../../../core/compoenents/page-title/page-title.component';
 import { ActionsToolbarComponent } from '../../components/actions-toolbar/actions-toolbar.component';
 import { BreadcrumbComponent } from '../../components/breadcrumb/breadcrumb.component';
@@ -17,6 +17,7 @@ import { FileManagerContainerStoreService } from '../../services/file-manager-co
   ],
   templateUrl: './file-manager-container.component.html',
   styleUrl: './file-manager-container.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [FileManagerContainerStoreService],
 })
 export class FileManagerContainerComponent {

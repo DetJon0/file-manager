@@ -1,10 +1,7 @@
 import { File } from './file.model';
+import { Folder } from './folder.model';
 
-export type FolderWithNestedFoldersAndFiles = {
-  id: number;
-  name: string;
-  parentId: number;
-  tags: string[];
+export type FolderWithNestedFoldersAndFiles = Folder & {
   files: File[];
   folders: FolderWithNestedFoldersAndFiles[];
 };

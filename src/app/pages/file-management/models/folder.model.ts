@@ -1,6 +1,6 @@
 export type Folder = {
-  id: number;
+  id: string;
   name: string;
-  parentId: number;
+  parentId: string;
   tags: string[];
 };
