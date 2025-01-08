@@ -1,0 +1,8 @@
+@if (files.isLoading()) {
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else if (files.error()) {
+} @else {
+  {{ files.value() | json }}
+}
