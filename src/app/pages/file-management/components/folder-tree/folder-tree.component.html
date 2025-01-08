@@ -1,8 +1,44 @@
-@if (files.isLoading()) {
-  <div class="loading">
-    <mat-spinner></mat-spinner>
-  </div>
-} @else if (files.error()) {
-} @else {
-  {{ files.value() | json }}
-}
+<mat-tree
+  #tree
+  [dataSource]="files.value() ?? []"
+  [childrenAccessor]="childrenAccessor"
+  class="tree px-1 py-2"
+>
+  <!-- This is the tree node template for leaf nodes -->
+  <!-- There is inline padding applied to this node using styles.
+    This padding value depends on the mat-icon-button width. -->
+  <mat-nested-tree-node
+    (click)="onFolderClick($event, node)"
+    class="d-block"
+    *matTreeNodeDef="let node"
+  >
+    <button mat-button color="accent" class="mat-tree-node gap-1">
+      <mat-icon>folder</mat-icon>
+      {{ node.name }}
+    </button>
+  </mat-nested-tree-node>
+  <!-- This is the tree node template for expandable nodes -->
+  <mat-nested-tree-node
+    class="d-block"
+    *matTreeNodeDef="let node; when: hasChild"
+    matTreeNodeToggle
+    [cdkTreeNodeTypeaheadLabel]="node.name"
+  >
+    <div class="mat-tree-node gap-1">
+      <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      </button>
+      <button mat-button (click)="onFolderClick($event, node)">
+        <mat-icon>folder</mat-icon>
+        {{ node.name }}
+      </button>
+    </div>
+    <!-- There is inline padding applied to this div using styles.
+        This padding value depends on the mat-icon-button width.  -->
+    <div [class.tree-invisible]="!tree.isExpanded(node)" role="group">
+      <ng-container matTreeNodeOutlet></ng-container>
+    </div>
+  </mat-nested-tree-node>
+</mat-tree>
