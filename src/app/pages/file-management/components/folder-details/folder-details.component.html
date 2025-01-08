@@ -1,1 +1,23 @@
-<p>folder-details works!</p>
+<div class="row">
+  @let selectedFolder = this.folderDetailsResource.value();
+  @for (folder of selectedFolder?.folders; track $index) {
+    <div class="col-1">
+      <mat-card class="p-1 align-items-center folder-card" (dblclick)="this.selectFolder(folder)">
+        <mat-icon>folder</mat-icon>
+        <span class="text-center">
+          {{ folder.name }}
+        </span>
+      </mat-card>
+    </div>
+  }
+  @for (file of selectedFolder?.files; track $index) {
+    <div class="col-1">
+      <mat-card (click)="openFile(file)" class="p-1 align-items-center file-card">
+        <app-file-icon [mimeType]="file.type"></app-file-icon>
+        <span class="text-center">
+          {{ file.name }}
+        </span>
+      </mat-card>
+    </div>
+  }
+</div>

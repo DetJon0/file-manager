@@ -1,0 +1,20 @@
+<div class="file-viewer-container">
+  @let sanitizedContent = this.sanitizedContent();
+  @let file = this.file();
+  @if (!!sanitizedContent && !!file) {
+    <h2>{{ file?.name }}</h2>
+
+    @if (isIframeSupportedFile(file)) {
+      <iframe [src]="sanitizedContent" width="100%" height="500px" frameborder="0"> </iframe>
+    }
+    @if (isImageFile(file)) {
+      <img [src]="sanitizedContent" alt="Image Preview" class="file-image" />
+    }
+    @if (isUnsupportedFile(file)) {
+      <div>
+        <p>Preview not available for this file type.</p>
+        <a [href]="downloadUrl()" download="{{ file?.name }}">Download {{ file?.name }}</a>
+      </div>
+    }
+  }
+</div>
