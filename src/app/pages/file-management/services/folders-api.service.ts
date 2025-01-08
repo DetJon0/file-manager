@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { BaseApiService } from '../../../core/services/base-api.service';
 import { FolderWithNestedFoldersAndFiles } from '../models/folder-with-nested-folders-and-files.model';
 import { Folder } from '../models/folder.model';
@@ -23,10 +23,22 @@ export class FoldersApiService extends BaseApiService {
       .pipe(map((folders) => buildFolderHierarchy(folders)));
   }
 
-  getFolderWithFilesAndFolders(id: string) {
+  getFolderWithFilesAndFolders({
+    parentId,
+    id,
+  }: {
+    parentId: string;
+    id: string;
+  }): Observable<FolderWithNestedFoldersAndFiles | undefined> {
     return this.http
-      .get<FolderWithNestedFoldersAndFiles[]>(`${this.baseUrl}/folders/${id}?_embed=files`)
-      .pipe(map((folders) => buildFolderHierarchy(folders)));
+      .get<FolderWithNestedFoldersAndFiles[]>(`${this.baseUrl}/folders?_embed=files`)
+      .pipe(
+        map((folders) =>
+          buildFolderHierarchy<FolderWithNestedFoldersAndFiles>(folders, parentId).find(
+            (x) => x.id === id,
+          ),
+        ),
+      );
   }
 
   getFolder(id: string) {

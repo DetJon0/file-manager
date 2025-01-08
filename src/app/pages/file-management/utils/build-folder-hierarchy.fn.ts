@@ -1,14 +1,11 @@
-import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
-import { Folder } from '../models/folder.model';
-
-export function buildFolderHierarchy(folders: Folder[], parentId = '0'): FolderWithNestedFolders[] {
+export function buildFolderHierarchy<T extends { parentId: string; id: string }>(
+  folders: T[],
+  parentId = '0',
+): Array<T & { folders: T[] | [] }> {
   return folders
     .filter((folder) => folder.parentId === parentId)
-    .map(
-      (folder: Folder) =>
-        ({
-          ...folder,
-          folders: buildFolderHierarchy(folders, folder.id),
-        }) satisfies FolderWithNestedFolders,
-    );
+    .map((folder: T) => ({
+      ...folder,
+      folders: buildFolderHierarchy(folders, folder.id),
+    }));
 }

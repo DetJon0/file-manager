@@ -23,7 +23,12 @@ export class FileManagerContainerStoreService {
   folderDetailsResource = rxResource({
     request: () => this.selectedFolder(),
     loader: ({ request }) =>
-      request ? this.#folderService.getFolderWithFilesAndFolders(request.id.toString()) : EMPTY,
+      request
+        ? this.#folderService.getFolderWithFilesAndFolders({
+            parentId: request.parentId.toString(),
+            id: request.id.toString(),
+          })
+        : EMPTY,
   });
 
   constructor() {}
