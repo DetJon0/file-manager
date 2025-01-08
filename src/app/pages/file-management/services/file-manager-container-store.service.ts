@@ -13,7 +13,7 @@ export class FileManagerContainerStoreService {
     this.folderSearchTerm$.pipe(debounceTime(300), distinctUntilChanged()),
   );
 
-  folderListResource = rxResource({
+  folderListResource = rxResource<FolderWithNestedFolders[], string | undefined>({
     request: () => this.folderSearchTerm(),
     loader: () => this.#folderService.getFolderWithNestedFolders(),
   });
