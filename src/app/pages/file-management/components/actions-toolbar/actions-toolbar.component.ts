@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, Injector } from '@angular/core';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { EMPTY, switchMap } from 'rxjs';
+import { File } from '../../models/file.model';
 import { Folder } from '../../models/folder.model';
 import { FileManagerContainerStoreService } from '../../services/file-manager-container-store.service';
 import { AddFolderDialogComponent } from '../add-folder-dialog/add-folder-dialog.component';
 import { DeleteFolderDialogComponent } from '../delete-folder-dialog/delete-folder-dialog.component';
+import { UploadFileDialogComponent } from '../upload-file-dialog/upload-file-dialog.component';
 
 @Component({
   selector: 'app-actions-toolbar',
@@ -58,5 +60,15 @@ export class ActionsToolbarComponent {
         }),
       )
       .subscribe();
+  }
+
+  onUploadFile(folder: Folder | null) {
+    if (!folder) return;
+
+    this.dialog.open(UploadFileDialogComponent, {
+      disableClose: true,
+      width: '400px',
+      injector: this.#injector,
+    });
   }
 }
