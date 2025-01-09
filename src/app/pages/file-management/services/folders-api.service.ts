@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { BaseApiService } from '../../../core/services/base-api.service';
 import { FolderWithNestedFoldersAndFiles } from '../models/folder-with-nested-folders-and-files.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
@@ -49,11 +49,25 @@ export class FoldersApiService extends BaseApiService {
   }
 
   createFolder(folder: Folder) {
-    return this.http.post(`${this.baseUrl}/folders`, folder);
+    return this.getFolders().pipe(
+      switchMap((folders) => {
+        if (folders.find((f) => f.name === folder.name && f.parentId === folder.parentId)) {
+          throw new Error('Folder with this name already exists. Choose a different name.');
+        }
+        return this.http.post<Folder>(`${this.baseUrl}/folders`, folder);
+      }),
+    );
   }
 
   updateFolder(id: string, folder: Folder) {
-    return this.http.put(`${this.baseUrl}/folders/${id}`, folder);
+    return this.getFolders().pipe(
+      switchMap((folders) => {
+        if (folders.find((f) => f.name === folder.name && f.parentId === folder.parentId)) {
+          throw new Error('Folder with this name already exists. Choose a different name.');
+        }
+        return this.http.put(`${this.baseUrl}/folders/${id}`, folder);
+      }),
+    );
   }
 
   searchFolders(query: string) {
