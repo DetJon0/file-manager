@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -24,15 +24,22 @@ import { FileManagerContainerStoreService } from '../../services/file-manager-co
   styleUrl: './add-folder-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddFolderDialogComponent {
+export class AddFolderDialogComponent implements OnInit {
   readonly #dialogRef = inject(MatDialogRef<AddFolderDialogComponent>);
   readonly #fb = inject(FormBuilder);
   readonly fileManagerStore = inject(FileManagerContainerStoreService);
+  readonly data = inject<Folder>(MAT_DIALOG_DATA);
 
   form = this.#fb.nonNullable.group({
     name: ['', [Validators.required]],
     tags: [[] as string[]],
   });
+
+  ngOnInit(): void {
+    if (this.data) {
+      this.form.patchValue(this.data);
+    }
+  }
 
   removeTag(tag: string) {
     this.form.controls.tags.setValue(
@@ -56,7 +63,14 @@ export class AddFolderDialogComponent {
       return;
     }
 
-    this.fileManagerStore.addNewFolder(this.form.getRawValue()).subscribe((folder) => {
+    let sub;
+    if (this.data) {
+      sub = this.fileManagerStore.updateFolder(this.data, this.form.getRawValue());
+    } else {
+      sub = this.fileManagerStore.addNewFolder(this.form.getRawValue());
+    }
+
+    sub.subscribe((folder) => {
       this.onClose(folder);
     });
   }
