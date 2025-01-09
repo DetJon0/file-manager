@@ -14,4 +14,9 @@
     <mat-icon>delete</mat-icon>
     Delete {{ selectedFolder?.name ?? 'Folder' }}
   </button>
+
+  <button (click)="onUploadFile(selectedFolder)" mat-stroked-button [disabled]="!selectedFolder">
+    <mat-icon>upload</mat-icon>
+    Upload to {{ selectedFolder?.name ?? 'Folder' }}
+  </button>
 </mat-toolbar>

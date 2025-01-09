@@ -1,8 +1,8 @@
 export type File = {
-  id: number;
+  id: string;
   name: string;
   type: string;
-  folderId: number;
+  folderId: string;
   content: string;
   tags: string[];
 };

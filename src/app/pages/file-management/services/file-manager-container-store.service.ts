@@ -6,11 +6,14 @@ import { AddFolderFormData } from '../models/add-folder.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
 import { Folder } from '../models/folder.model';
 import { FoldersApiService } from './folders-api.service';
+import { File } from '../models/file.model';
+import { FilesApiService } from './files-api.service';
 
 @Injectable()
 export class FileManagerContainerStoreService {
   readonly #snackBar = inject(MatSnackBar);
   readonly #folderService = inject(FoldersApiService);
+  readonly #fileService = inject(FilesApiService);
 
   folderSearchTerm$ = new BehaviorSubject<string>('');
   folderSearchTerm = toSignal(
@@ -93,6 +96,21 @@ export class FileManagerContainerStoreService {
         },
         error: (error) => {
           this.#snackBar.open(error.message ?? 'Failed to delete folder', 'Close');
+        },
+      }),
+    );
+  }
+
+  uploadFile(file: File) {
+    return this.#fileService.createFile(file).pipe(
+      tap({
+        next: () => {
+          this.#snackBar.open('File uploaded Successfully', 'Close');
+
+          this.folderDetailsResource.reload();
+        },
+        error: (error) => {
+          this.#snackBar.open(error.message ?? 'Failed to upload file', 'Close');
         },
       }),
     );
