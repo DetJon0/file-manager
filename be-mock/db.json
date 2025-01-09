@@ -4,54 +4,108 @@
       "id": "1",
       "name": "Folder 1",
       "parentId": "0",
-      "tags": ["tagFolder1", "tag1"]
+      "tags": [
+        "tagFolder1",
+        "tag1"
+      ]
     },
     {
       "id": "2",
       "name": "Folder 2",
       "parentId": "0",
-      "tags": ["tagFolder2", "tag2"]
+      "tags": [
+        "tagFolder2",
+        "tag2"
+      ]
     },
     {
       "id": "3",
       "name": "Folder 1_1",
       "parentId": "1",
-      "tags": ["tagFolder1_1", "tag1_1"]
+      "tags": [
+        "tagFolder1_1",
+        "tag1_1"
+      ]
     },
     {
       "id": "4",
       "name": "Folder 1_2",
       "parentId": "1",
-      "tags": ["tagFolder1_2", "tag1_2"]
+      "tags": [
+        "tagFolder1_2",
+        "tag1_2"
+      ]
     },
     {
       "id": "5",
       "name": "Folder 1_1_1",
       "parentId": "3",
-      "tags": ["tagFolder1_1_1", "tag1_1_1"]
+      "tags": [
+        "tagFolder1_1_1",
+        "tag1_1_1"
+      ]
     },
     {
       "id": "1736423599356",
-      "name": "test",
-      "tags": ["test", "newProg"],
-      "parentId": "0"
+      "name": "test22",
+      "tags": [
+        "test",
+        "newProg"
+      ],
+      "parentId": "0",
+      "folders": [
+        {
+          "id": "1736423792651",
+          "name": "test inside ",
+          "tags": [
+            "test",
+            "test inside"
+          ],
+          "parentId": "1736423599356",
+          "folders": []
+        },
+        {
+          "id": "1736428642986",
+          "name": "test",
+          "tags": [
+            "test",
+            "test"
+          ],
+          "parentId": "1736423599356",
+          "folders": []
+        }
+      ]
     },
     {
       "id": "1736423696247",
-      "name": "test2231",
-      "tags": ["testestse"],
-      "parentId": "0"
+      "name": "test2231321",
+      "tags": [
+        "testestse",
+        "test2231321",
+        "wow"
+      ],
+      "parentId": "0",
+      "folders": []
     },
     {
       "id": "1736423792651",
-      "name": "test inside ",
-      "tags": ["test", "test inside"],
-      "parentId": "1736423599356"
+      "name": "test inside 123455",
+      "tags": [
+        "test",
+        "test inside",
+        "1234"
+      ],
+      "parentId": "1736423599356",
+      "files": [],
+      "folders": []
     },
     {
       "id": "1736428642986",
       "name": "test",
-      "tags": ["test", "test"],
+      "tags": [
+        "test",
+        "test"
+      ],
       "parentId": "1736423599356"
     }
   ],
@@ -62,7 +116,10 @@
       "type": "text/plain",
       "folderId": "1",
       "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
-      "tags": ["tagFile1", "tag1"]
+      "tags": [
+        "tagFile1",
+        "tag1"
+      ]
     },
     {
       "id": "2",
@@ -70,7 +127,10 @@
       "type": "text/plain",
       "folderId": "1",
       "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
-      "tags": ["tagFile2", "tag2"]
+      "tags": [
+        "tagFile2",
+        "tag2"
+      ]
     },
     {
       "id": "3",
@@ -78,7 +138,10 @@
       "type": "image/jpeg",
       "folderId": "3",
       "content": "d29ya2luZyBvbiBiZXN0IHByYWN0aWNlcyBmb3IgcHJvamVjdCBzdHJ1Y3R1cmUNCndvcmtpbmcgb24gcHJpbWVuZyBwcm9qZWN0",
-      "tags": ["tagFile3", "tag3"]
+      "tags": [
+        "tagFile3",
+        "tag3"
+      ]
     },
     {
       "id": "4",
@@ -86,7 +149,10 @@
       "type": "text/plain",
       "folderId": "5",
       "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
-      "tags": ["tagFile4", "tag4"]
+      "tags": [
+        "tagFile4",
+        "tag4"
+      ]
     }
   ],
   "users": [

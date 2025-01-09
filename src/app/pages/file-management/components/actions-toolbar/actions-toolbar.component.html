@@ -1,5 +1,17 @@
-<mat-toolbar>
-  <button (click)="addNewFolder()" mat-icon-button>
+<mat-toolbar class="gap-2">
+  @let selectedFolder = folderManagerStore.selectedFolder();
+  <button (click)="onAddNewFolder()" mat-stroked-button>
     <mat-icon>create_new_folder</mat-icon>
+    Add Folder
+  </button>
+
+  <button (click)="onRenameFolder(selectedFolder)" mat-stroked-button [disabled]="!selectedFolder">
+    <mat-icon>edit</mat-icon>
+    Edit {{ selectedFolder?.name ?? 'Folder' }}
+  </button>
+
+  <button (click)="onDeleteFolder(selectedFolder)" mat-stroked-button [disabled]="!selectedFolder">
+    <mat-icon>delete</mat-icon>
+    Delete {{ selectedFolder?.name ?? 'Folder' }}
   </button>
 </mat-toolbar>

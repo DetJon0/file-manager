@@ -51,7 +51,11 @@ export class FoldersApiService extends BaseApiService {
   createFolder(folder: Folder) {
     return this.getFolders().pipe(
       switchMap((folders) => {
-        if (folders.find((f) => f.name === folder.name && f.parentId === folder.parentId)) {
+        if (
+          folders.find(
+            (f) => f.id !== folder.id && f.name === folder.name && f.parentId === folder.parentId,
+          )
+        ) {
           throw new Error('Folder with this name already exists. Choose a different name.');
         }
         return this.http.post<Folder>(`${this.baseUrl}/folders`, folder);
@@ -62,12 +66,20 @@ export class FoldersApiService extends BaseApiService {
   updateFolder(id: string, folder: Folder) {
     return this.getFolders().pipe(
       switchMap((folders) => {
-        if (folders.find((f) => f.name === folder.name && f.parentId === folder.parentId)) {
+        if (
+          folders.find(
+            (f) => f.id !== folder.id && f.name === folder.name && f.parentId === folder.parentId,
+          )
+        ) {
           throw new Error('Folder with this name already exists. Choose a different name.');
         }
-        return this.http.put(`${this.baseUrl}/folders/${id}`, folder);
+        return this.http.put<Folder>(`${this.baseUrl}/folders/${id}`, folder);
       }),
     );
+  }
+
+  deleteFolder(id: string) {
+    return this.http.delete<Folder>(`${this.baseUrl}/folders/${id}`);
   }
 
   searchFolders(query: string) {

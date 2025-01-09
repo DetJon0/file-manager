@@ -39,8 +39,7 @@ export class FileManagerContainerStoreService {
 
   addNewFolder(addFolder: AddFolderFormData) {
     const folder: Folder = {
-      name: addFolder.name,
-      tags: addFolder.tags,
+      ...addFolder,
       id: Date.now().toString(),
       parentId: this.selectedFolder()?.id ?? '0',
     };
@@ -48,16 +47,52 @@ export class FileManagerContainerStoreService {
     return this.#folderService.createFolder(folder).pipe(
       tap({
         next: () => {
-          //notify user
-
           this.#snackBar.open('Folder created Successfully', 'Close');
 
           this.folderListResource.reload();
           this.folderDetailsResource.reload();
         },
         error: (error) => {
-          //notify user
           this.#snackBar.open(error.message ?? 'Failed to create folder', 'Close');
+        },
+      }),
+    );
+  }
+
+  updateFolder(oldFolder: Folder, newChanges: AddFolderFormData) {
+    const folder: Folder = {
+      ...oldFolder,
+      ...newChanges,
+    };
+
+    return this.#folderService.updateFolder(folder.id, folder).pipe(
+      tap({
+        next: () => {
+          this.#snackBar.open('Folder updated Successfully', 'Close');
+
+          this.folderListResource.update((old) =>
+            old?.map((f) => (f.id === folder.id ? { ...f, ...folder } : f)),
+          );
+          this.#selectedFolder.update((x) => ({ ...x!, ...folder }));
+        },
+        error: (error) => {
+          this.#snackBar.open(error.message ?? 'Failed to update folder', 'Close');
+        },
+      }),
+    );
+  }
+
+  deleteFolder(folder: Folder) {
+    return this.#folderService.deleteFolder(folder.id).pipe(
+      tap({
+        next: () => {
+          this.#snackBar.open('Folder deleted Successfully', 'Close');
+
+          this.folderListResource.update((old) => old?.filter((f) => f.id !== folder.id));
+          this.#selectedFolder.set(null);
+        },
+        error: (error) => {
+          this.#snackBar.open(error.message ?? 'Failed to delete folder', 'Close');
         },
       }),
     );
