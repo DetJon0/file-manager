@@ -1,19 +1,26 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, EMPTY, tap } from 'rxjs';
 import { AddFolderFormData } from '../models/add-folder.model';
+import { File } from '../models/file.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
 import { Folder } from '../models/folder.model';
-import { FoldersApiService } from './folders-api.service';
-import { File } from '../models/file.model';
+import {
+  BREADCRUMB_QUERY_PARAM_KEY,
+  BREADCRUMB_QUERY_PARAM_SEPARATOR,
+} from '../utils/breadcrumb.consts';
 import { FilesApiService } from './files-api.service';
+import { FolderUtilsService } from './folder-utils.service';
+import { FoldersApiService } from './folders-api.service';
 
 @Injectable()
 export class FileManagerContainerStoreService {
   readonly #snackBar = inject(MatSnackBar);
   readonly #folderService = inject(FoldersApiService);
   readonly #fileService = inject(FilesApiService);
+  readonly #router = inject(Router);
 
   folderSearchTerm$ = new BehaviorSubject<string>('');
   folderSearchTerm = toSignal(
@@ -116,7 +123,14 @@ export class FileManagerContainerStoreService {
     );
   }
 
-  selectFolder(folder: FolderWithNestedFolders) {
+  selectFolder(folder: FolderWithNestedFolders | null) {
+    const path = folder
+      ? (FolderUtilsService.getPathToFile(this.folderListResource.value() ?? [], folder) ?? [])
+      : [];
+
+    const queryParamIdPath = path.map((item) => item.id).join(BREADCRUMB_QUERY_PARAM_SEPARATOR);
+    this.#router.navigate([], { queryParams: { [BREADCRUMB_QUERY_PARAM_KEY]: queryParamIdPath } });
+
     this.#selectedFolder.set(folder);
   }
 }
