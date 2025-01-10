@@ -1,4 +1,4 @@
-<mat-toolbar class="gap-2">
+<mat-toolbar class="gap-2 flex-wrap h-100 p-2">
   @let selectedFolder = folderManagerStore.selectedFolder();
   <button (click)="onAddNewFolder()" mat-stroked-button>
     <mat-icon>create_new_folder</mat-icon>
@@ -19,4 +19,6 @@
     <mat-icon>upload</mat-icon>
     Upload to {{ selectedFolder?.name ?? 'Folder' }}
   </button>
+
+  <app-folder-filter class="ms-auto" />
 </mat-toolbar>
