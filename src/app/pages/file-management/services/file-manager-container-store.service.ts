@@ -7,6 +7,7 @@ import { AddFolderFormData } from '../models/add-folder.model';
 import { File } from '../models/file.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
 import { Folder } from '../models/folder.model';
+import { SearchParams } from '../models/search-params.model';
 import {
   BREADCRUMB_QUERY_PARAM_KEY,
   BREADCRUMB_QUERY_PARAM_SEPARATOR,
@@ -22,14 +23,15 @@ export class FileManagerContainerStoreService {
   readonly #fileService = inject(FilesApiService);
   readonly #router = inject(Router);
 
-  folderSearchTerm$ = new BehaviorSubject<string>('');
-  folderSearchTerm = toSignal(
-    this.folderSearchTerm$.pipe(debounceTime(300), distinctUntilChanged()),
+  #folderSearchParams$ = new BehaviorSubject<Partial<SearchParams>>({});
+  folderSearchParams = toSignal(
+    this.#folderSearchParams$.pipe(debounceTime(300), distinctUntilChanged()),
   );
 
-  folderListResource = rxResource<FolderWithNestedFolders[], string | undefined>({
-    request: () => this.folderSearchTerm(),
-    loader: () => this.#folderService.getFolderWithNestedFolders(),
+  folderListResource = rxResource({
+    request: () => this.folderSearchParams(),
+    loader: ({ request, abortSignal }) =>
+      this.#folderService.getFolderWithNestedFolders(request, abortSignal),
   });
 
   readonly #selectedFolder = signal<FolderWithNestedFolders | null>(null);
@@ -46,6 +48,10 @@ export class FileManagerContainerStoreService {
   });
 
   constructor() {}
+
+  updateFolderSearchParams(searchParams: Partial<SearchParams>) {
+    this.#folderSearchParams$.next({ ...this.#folderSearchParams$.value, ...searchParams });
+  }
 
   addNewFolder(addFolder: AddFolderFormData) {
     const folder: Folder = {

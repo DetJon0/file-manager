@@ -1,9 +1,11 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, switchMap } from 'rxjs';
+import { map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseApiService } from '../../../core/services/base-api.service';
 import { FolderWithNestedFoldersAndFiles } from '../models/folder-with-nested-folders-and-files.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
 import { Folder } from '../models/folder.model';
+import { SearchParams } from '../models/search-params.model';
 import { buildFolderHierarchy } from '../utils/build-folder-hierarchy.fn';
 
 @Injectable({
@@ -18,10 +20,32 @@ export class FoldersApiService extends BaseApiService {
     return this.http.get<Folder[]>(`${this.baseUrl}/folders`);
   }
 
-  getFolderWithNestedFolders(): Observable<FolderWithNestedFolders[]> {
+  getFolderWithNestedFolders(
+    searchParams: Partial<SearchParams> | undefined,
+    abortSignal: AbortSignal,
+  ): Observable<FolderWithNestedFolders[]> {
+    const stopRequest$ = new Subject<void>();
+
+    abortSignal.onabort = () => {
+      console.log('Request aborted');
+      stopRequest$.next();
+    };
+
+    let params = new HttpParams();
+    let searchField = searchParams?.searchField ?? 'name';
+
+    if (searchParams?.searchTerm) {
+      params = params.set(searchField === 'name' ? 'name' : 'tags[0]', searchParams.searchTerm);
+    }
+
     return this.http
-      .get<FolderWithNestedFolders[]>(`${this.baseUrl}/folders`)
-      .pipe(map((folders) => buildFolderHierarchy(folders)));
+      .get<FolderWithNestedFolders[]>(`${this.baseUrl}/folders`, {
+        params,
+      })
+      .pipe(
+        takeUntil(stopRequest$),
+        map((folders) => buildFolderHierarchy(folders)),
+      );
   }
 
   getFolderWithFilesAndFolders({
