@@ -18,4 +18,10 @@
     </button>
   }
   <span class="flex-grow-1"></span>
+  @if (activeUser(); as activeUserData) {
+    <button mat-button (click)="onLogout()" class="example-icon" aria-label="Click to logout">
+      <span>{{ activeUserData.name }}</span>
+      <mat-icon>logout</mat-icon>
+    </button>
+  }
 </mat-toolbar>

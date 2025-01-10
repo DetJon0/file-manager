@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <mat-card>
+    <mat-card-header class="mb-4">
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form id="loginForm" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-100 mb-2">
+          <input
+            id="email"
+            [formControl]="form.controls.email"
+            matInput
+            type="email"
+            placeholder="Email"
+          />
+          @if (form.controls.email.hasError('required')) {
+            <mat-error>Required</mat-error>
+          } @else if (form.controls.email.hasError('email')) {
+            <mat-error>Invalid email</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="w-100 mb-2">
+          <input
+            id="password"
+            [formControl]="form.controls.password"
+            matInput
+            type="password"
+            placeholder="Password"
+          />
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+        @let loading = this.loading();
+        <button [disabled]="loading" mat-flat-button class="w-100 rounded mt-4">
+          @if (loading) {
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          } @else {
+            <mat-icon>login</mat-icon>
+          }
+          {{ !loading ? 'Login ' : '' }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
