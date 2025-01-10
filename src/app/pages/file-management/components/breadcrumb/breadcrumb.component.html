@@ -1,13 +1,14 @@
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    @for (folder of breadcrumbItems(); track folder.id; let last = $last) {
-      <li class="breadcrumb-item" [class.active]="last" aria-current="page">
+  <div class="list-none d-flex align-items-center my-2">
+    @for (folder of breadcrumbItemsFromRoute(); track folder.id; let last = $last) {
+      <div class="" [class.active]="last" aria-current="page">
         <button mat-button [disabled]="last" (click)="selectFolder(folder.id)">
           {{ folder.name }}
         </button>
-      </li>
+      </div>
+      @if (!last) {
+        <mat-icon>chevron_right</mat-icon>
+      }
     }
-  </ol>
+  </div>
 </nav>
-{{ breadcrumbItems() | json }}
-{{ breadcrumbItemsFromRoute() | json }}

@@ -1,7 +1,7 @@
-import { JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/internal/operators/map';
 import { BreadcrumbItem } from '../../models/breadcramb-item.model';
@@ -16,7 +16,7 @@ import {
 
 @Component({
   selector: 'app-breadcrumb',
-  imports: [JsonPipe, MatButtonModule],
+  imports: [MatButtonModule, MatIcon],
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,13 +25,7 @@ export class BreadcrumbComponent {
   readonly fileManagerStore = inject(FileManagerContainerStoreService);
   readonly #route = inject(ActivatedRoute);
 
-  breadcrumbItems = computed(() => {
-    const folders = this.fileManagerStore.folderListResource.value() ?? [];
-    const currentFolder = this.fileManagerStore.selectedFolder();
-
-    return this.getBreadcrumbItems(folders, currentFolder);
-  });
-  breadcrumbItemsIdFromRoute = toSignal(
+  #breadcrumbItemsIdFromRoute = toSignal(
     this.#route.queryParamMap.pipe(
       map(
         (params) =>
@@ -42,7 +36,7 @@ export class BreadcrumbComponent {
   );
   breadcrumbItemsFromRoute = computed(() => {
     const folders = this.fileManagerStore.folderListResource.value() ?? [];
-    const ids = this.breadcrumbItemsIdFromRoute();
+    const ids = this.#breadcrumbItemsIdFromRoute();
 
     return this.#getBreadcrumbItemsFromIds(folders, ids);
   });
@@ -50,24 +44,12 @@ export class BreadcrumbComponent {
   constructor() {}
 
   selectFolder(folderId: string) {
-    const a = FolderUtilsService.getFolderFromId(
-      this.fileManagerStore.folderListResource.value() ?? [],
-      folderId,
-    )!;
-    console.log('🚀 ~ BreadcrumbComponent ~ selectFolder ~ a:', a);
-    this.fileManagerStore.selectFolder(a);
-  }
-
-  getBreadcrumbItems(
-    folders: FolderWithNestedFolders[],
-    currentFolder: FolderWithNestedFolders | null,
-  ): BreadcrumbItem[] {
-    if (!currentFolder) {
-      return [HOME_ITEM];
-    }
-
-    const path = FolderUtilsService.getPathToFile(folders, currentFolder);
-    return path ? [HOME_ITEM, ...path] : [HOME_ITEM];
+    this.fileManagerStore.selectFolder(
+      FolderUtilsService.getFolderFromId(
+        this.fileManagerStore.folderListResource.value() ?? [],
+        folderId,
+      ),
+    );
   }
 
   #getBreadcrumbItemsFromIds(
