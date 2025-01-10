@@ -1,1 +1,14 @@
-<p>breadcrumb works!</p>
+<nav aria-label="breadcrumb">
+  <div class="list-none d-flex align-items-center my-2">
+    @for (folder of breadcrumbItemsFromRoute(); track folder.id; let last = $last) {
+      <div class="" [class.active]="last" aria-current="page">
+        <button mat-button [disabled]="last" (click)="selectFolder(folder.id)">
+          {{ folder.name }}
+        </button>
+      </div>
+      @if (!last) {
+        <mat-icon>chevron_right</mat-icon>
+      }
+    }
+  </div>
+</nav>
