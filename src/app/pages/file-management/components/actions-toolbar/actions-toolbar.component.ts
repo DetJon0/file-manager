@@ -12,6 +12,7 @@ import { AddFolderDialogComponent } from '../add-folder-dialog/add-folder-dialog
 import { DeleteFolderDialogComponent } from '../delete-folder-dialog/delete-folder-dialog.component';
 import { FolderFilterComponent } from '../folder-filter/folder-filter.component';
 import { UploadFileDialogComponent } from '../upload-file-dialog/upload-file-dialog.component';
+import { RoleDirective } from '../../../../core/directives/role.directive';
 
 @Component({
   selector: 'app-actions-toolbar',
@@ -22,6 +23,7 @@ import { UploadFileDialogComponent } from '../upload-file-dialog/upload-file-dia
     ReactiveFormsModule,
     MatSelectModule,
     FolderFilterComponent,
+    RoleDirective,
   ],
   templateUrl: './actions-toolbar.component.html',
   styleUrl: './actions-toolbar.component.scss',

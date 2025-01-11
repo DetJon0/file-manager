@@ -10,7 +10,12 @@
     Edit {{ selectedFolder?.name ?? 'Folder' }}
   </button>
 
-  <button (click)="onDeleteFolder(selectedFolder)" mat-stroked-button [disabled]="!selectedFolder">
+  <button
+    *appRole="['admin']"
+    (click)="onDeleteFolder(selectedFolder)"
+    mat-stroked-button
+    [disabled]="!selectedFolder"
+  >
     <mat-icon>delete</mat-icon>
     Delete {{ selectedFolder?.name ?? 'Folder' }}
   </button>
