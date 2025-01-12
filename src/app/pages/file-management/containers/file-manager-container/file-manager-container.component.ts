@@ -5,7 +5,7 @@ import { BreadcrumbComponent } from '../../components/breadcrumb/breadcrumb.comp
 import { FolderDetailsComponent } from '../../components/folder-details/folder-details.component';
 import { FolderTreeComponent } from '../../components/folder-tree/folder-tree.component';
 import { FileManagerContainerStoreService } from '../../services/file-manager-container-store.service';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-file-manager-container',
   imports: [
@@ -14,6 +14,7 @@ import { FileManagerContainerStoreService } from '../../services/file-manager-co
     FolderDetailsComponent,
     BreadcrumbComponent,
     PageTitleComponent,
+    DragDropModule,
   ],
   templateUrl: './file-manager-container.component.html',
   styleUrl: './file-manager-container.component.scss',

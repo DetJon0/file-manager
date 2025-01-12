@@ -8,11 +8,19 @@
   <!-- There is inline padding applied to this node using styles.
     This padding value depends on the mat-icon-button width. -->
   <mat-nested-tree-node
+    id="treeElement"
     (click)="onFolderClick($event, node)"
     class="d-block"
     *matTreeNodeDef="let node"
   >
-    <button mat-button color="accent" class="mat-tree-node gap-1">
+    <button
+      cdkDropList
+      [cdkDropListData]="node"
+      (cdkDropListDropped)="onDrop($event, node)"
+      mat-button
+      color="accent"
+      class="mat-tree-node gap-1"
+    >
       <mat-icon>folder</mat-icon>
       {{ node.name }}
     </button>
@@ -30,14 +38,20 @@
           {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
         </mat-icon>
       </button>
-      <button mat-button (click)="onFolderClick($event, node)">
+      <button
+        cdkDropList
+        [cdkDropListData]="node"
+        (cdkDropListDropped)="onDrop($event, node)"
+        mat-button
+        (click)="onFolderClick($event, node)"
+      >
         <mat-icon>folder</mat-icon>
         {{ node.name }}
       </button>
     </div>
     <!-- There is inline padding applied to this div using styles.
         This padding value depends on the mat-icon-button width.  -->
-    <div [class.tree-invisible]="!tree.isExpanded(node)" role="group">
+    <div id="treeElement1" role="group" [class.tree-invisible]="!tree.isExpanded(node)">
       <ng-container matTreeNodeOutlet></ng-container>
     </div>
   </mat-nested-tree-node>

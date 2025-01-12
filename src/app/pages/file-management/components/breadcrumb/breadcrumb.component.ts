@@ -57,7 +57,9 @@ export class BreadcrumbComponent {
     breadcrumbItemIds: string[],
   ): BreadcrumbItem[] {
     let tempFolders = folders;
+    console.log('🚀 ~ BreadcrumbComponent ~ tempFolders:', tempFolders);
     const breadcrumb = [HOME_ITEM];
+    console.log('🚀 ~ BreadcrumbComponent ~ breadcrumb:', breadcrumb);
 
     for (const id of breadcrumbItemIds) {
       const folder = tempFolders.find((f) => f.id === id);

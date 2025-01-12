@@ -39,6 +39,10 @@ export class FilesApiService extends BaseApiService {
     );
   }
 
+  moveFile(id: string, folderId: string) {
+    return this.http.patch<File>(`${this.baseUrl}/files/${id}`, { folderId });
+  }
+
   searchFiles(query: string) {
     return this.http.get(`${this.baseUrl}/files/search?q=${query}`);
   }
