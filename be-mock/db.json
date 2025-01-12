@@ -149,7 +149,7 @@
       "id": "2",
       "name": "test.txt",
       "type": "text/plain",
-      "folderId": "1",
+      "folderId": "2",
       "content": "VGhpcyBpcyBhIHNhbXBsZSB0ZXh0IGZpbGUu",
       "tags": [
         "tagFile2",

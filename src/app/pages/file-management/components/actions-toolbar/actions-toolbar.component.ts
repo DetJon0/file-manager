@@ -6,13 +6,13 @@ import { MatIcon } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbar } from '@angular/material/toolbar';
 import { EMPTY, switchMap } from 'rxjs';
+import { RoleDirective } from '../../../../core/directives/role.directive';
 import { Folder } from '../../models/folder.model';
 import { FileManagerContainerStoreService } from '../../services/file-manager-container-store.service';
 import { AddFolderDialogComponent } from '../add-folder-dialog/add-folder-dialog.component';
 import { DeleteFolderDialogComponent } from '../delete-folder-dialog/delete-folder-dialog.component';
 import { FolderFilterComponent } from '../folder-filter/folder-filter.component';
 import { UploadFileDialogComponent } from '../upload-file-dialog/upload-file-dialog.component';
-import { RoleDirective } from '../../../../core/directives/role.directive';
 
 @Component({
   selector: 'app-actions-toolbar',

@@ -12,7 +12,7 @@ import { File } from '../../models/file.model';
 export class FileViewerComponent {
   readonly sanitizer = inject(DomSanitizer);
 
-  file = input<File | null>();
+  file = input.required<File>();
   sanitizedContent = computed(() => {
     const file = this.file();
     return file && this.sanitizeFileContent(file);

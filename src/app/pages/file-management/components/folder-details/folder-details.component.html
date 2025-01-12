@@ -20,7 +20,7 @@
       <mat-card
         cdkDrag
         [cdkDragData]="file"
-        (click)="openFile(file)"
+        (dblclick)="openFile(file)"
         class="p-1 align-items-center file-card"
       >
         <app-file-icon [mimeType]="file.type"></app-file-icon>
