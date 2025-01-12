@@ -1,7 +1,7 @@
 <div id="element-details" cdkDropList class="row row-gap-2">
   @let selectedFolder = this.folderDetailsResource.value();
   @for (folder of selectedFolder?.folders; track $index) {
-    <div class="col-2">
+    <div class="col-6 col-lg-3 col-xl-2">
       <mat-card
         cdkDrag
         [cdkDragData]="folder"
@@ -16,7 +16,7 @@
     </div>
   }
   @for (file of selectedFolder?.files; track $index) {
-    <div class="col-2">
+    <div class="col-6 col-lg-3 col-xl-2">
       <mat-card
         cdkDrag
         [cdkDragData]="file"
