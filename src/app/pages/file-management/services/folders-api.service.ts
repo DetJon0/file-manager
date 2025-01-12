@@ -106,6 +106,10 @@ export class FoldersApiService extends BaseApiService {
     return this.http.delete<Folder>(`${this.baseUrl}/folders/${id}`);
   }
 
+  moveFolder(id: string, parentId: string) {
+    return this.http.patch<Folder>(`${this.baseUrl}/folders/${id}`, { parentId });
+  }
+
   searchFolders(query: string) {
     return this.http.get(`${this.baseUrl}/folders/search?q=${query}`);
   }

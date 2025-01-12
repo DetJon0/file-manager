@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, EMPTY, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, EMPTY, Observable, tap } from 'rxjs';
 import { AddFolderFormData } from '../models/add-folder.model';
 import { File } from '../models/file.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
@@ -138,5 +138,30 @@ export class FileManagerContainerStoreService {
     this.#router.navigate([], { queryParams: { [BREADCRUMB_QUERY_PARAM_KEY]: queryParamIdPath } });
 
     this.#selectedFolder.set(folder);
+  }
+
+  moveFolderOrFile(draggedData: Folder | File, targetFolderId: string) {
+    let obs: Observable<Folder | File>;
+    if ('type' in draggedData) {
+      // file
+      obs = this.#fileService.moveFile(draggedData.id, targetFolderId);
+    } else {
+      // folder
+      obs = this.#folderService.moveFolder(draggedData.id, targetFolderId);
+    }
+
+    return obs.pipe(
+      tap({
+        next: () => {
+          this.#snackBar.open('File uploaded Successfully', 'Close');
+
+          this.folderListResource.reload();
+          this.folderDetailsResource.reload();
+        },
+        error: (error) => {
+          this.#snackBar.open(error.message ?? 'Failed to upload file', 'Close');
+        },
+      }),
+    );
   }
 }
