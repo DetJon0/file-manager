@@ -82,4 +82,8 @@ export class ActionsToolbarComponent {
       injector: this.#injector,
     });
   }
+
+  onToggleSelectMode() {
+    this.folderManagerStore.toggleSelectMode();
+  }
 }

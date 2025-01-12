@@ -1,5 +1,6 @@
 <div id="element-details" cdkDropList class="row row-gap-2">
   @let selectedFolder = this.folderDetailsResource.value();
+  @let selectMode = this.selectMode();
   @for (folder of selectedFolder?.folders; track $index) {
     <div class="col-6 col-lg-3 col-xl-2">
       <mat-card
@@ -10,6 +11,9 @@
       >
         <mat-icon>folder</mat-icon>
         <span class="text-center">
+          @if (selectMode) {
+            <mat-checkbox (change)="onSelectElement($event, folder)" class="me-1" />
+          }
           {{ folder.name }}
         </span>
       </mat-card>
@@ -25,6 +29,9 @@
       >
         <app-file-icon [mimeType]="file.type"></app-file-icon>
         <span class="text-center">
+          @if (selectMode) {
+            <mat-checkbox (change)="onSelectElement($event, file)" class="me-1" />
+          }
           {{ file.name }}
         </span>
       </mat-card>
