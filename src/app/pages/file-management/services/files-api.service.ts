@@ -39,6 +39,10 @@ export class FilesApiService extends BaseApiService {
     );
   }
 
+  deleteFile(id: string) {
+    return this.http.delete<File>(`${this.baseUrl}/files/${id}`);
+  }
+
   moveFile(id: string, folderId: string) {
     return this.http.patch<File>(`${this.baseUrl}/files/${id}`, { folderId });
   }

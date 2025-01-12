@@ -47,6 +47,10 @@ export class FileManagerContainerStoreService {
         : EMPTY,
   });
 
+  readonly #selectMode = signal(false);
+  readonly selectMode = this.#selectMode.asReadonly();
+  readonly selectedElements = new Set<File | Folder>();
+
   constructor() {}
 
   updateFolderSearchParams(searchParams: Partial<SearchParams>) {
@@ -99,6 +103,9 @@ export class FileManagerContainerStoreService {
   }
 
   deleteFolder(folder: Folder) {
+    if (this.selectMode()) {
+      return this.batchDelete();
+    }
     return this.#folderService.deleteFolder(folder.id).pipe(
       tap({
         next: () => {
@@ -129,7 +136,37 @@ export class FileManagerContainerStoreService {
     );
   }
 
+  toggleSelectMode() {
+    this.#selectMode.update((x) => !x);
+    this.selectedElements.clear();
+  }
+  selectElement(element: Folder | File) {
+    this.selectedElements.add(element);
+  }
+  deselectElement(element: Folder | File) {
+    this.selectedElements.delete(element);
+  }
+
+  batchDelete() {
+    return this.#folderService.batchDeleteFoldersAndFiles([...this.selectedElements]).pipe(
+      tap({
+        next: () => {
+          this.#snackBar.open('Folders and Files deleted Successfully', 'Close');
+
+          this.folderListResource.reload();
+          this.folderDetailsResource.reload();
+          this.toggleSelectMode();
+        },
+        error: (error) => {
+          this.#snackBar.open(error.message ?? 'Failed to delete folders and files', 'Close');
+        },
+      }),
+    );
+  }
+
   selectFolder(folder: FolderWithNestedFolders | null) {
+    if (this.#selectMode()) return;
+
     const path = folder
       ? (FolderUtilsService.getPathToFile(this.folderListResource.value() ?? [], folder) ?? [])
       : [];
@@ -140,7 +177,26 @@ export class FileManagerContainerStoreService {
     this.#selectedFolder.set(folder);
   }
 
-  moveFolderOrFile(draggedData: Folder | File, targetFolderId: string) {
+  moveFolderOrFile(draggedData: Folder | File, targetFolderId: string): Observable<unknown> {
+    if (this.selectMode()) {
+      return this.#folderService
+        .batchMoveFoldersAndFiles([...this.selectedElements], targetFolderId)
+        .pipe(
+          tap({
+            next: () => {
+              this.#snackBar.open('Files and folders moved Successfully', 'Close');
+
+              this.folderListResource.reload();
+              this.folderDetailsResource.reload();
+              this.toggleSelectMode();
+            },
+            error: (error) => {
+              this.#snackBar.open(error.message ?? 'Failed to move files and Folders', 'Close');
+            },
+          }),
+        );
+    }
+
     let obs: Observable<Folder | File>;
     if ('type' in draggedData) {
       // file
@@ -153,13 +209,13 @@ export class FileManagerContainerStoreService {
     return obs.pipe(
       tap({
         next: () => {
-          this.#snackBar.open('File uploaded Successfully', 'Close');
+          this.#snackBar.open('File moved Successfully', 'Close');
 
           this.folderListResource.reload();
           this.folderDetailsResource.reload();
         },
         error: (error) => {
-          this.#snackBar.open(error.message ?? 'Failed to upload file', 'Close');
+          this.#snackBar.open(error.message ?? 'Failed to move file', 'Close');
         },
       }),
     );

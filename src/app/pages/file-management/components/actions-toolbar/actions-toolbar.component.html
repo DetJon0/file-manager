@@ -1,11 +1,16 @@
 <mat-toolbar class="gap-2 flex-wrap h-100 p-2">
   @let selectedFolder = folderManagerStore.selectedFolder();
+  @let selectMode = folderManagerStore.selectMode();
   <button (click)="onAddNewFolder()" mat-stroked-button>
     <mat-icon>create_new_folder</mat-icon>
     Add Folder
   </button>
 
-  <button (click)="onRenameFolder(selectedFolder)" mat-stroked-button [disabled]="!selectedFolder">
+  <button
+    (click)="onRenameFolder(selectedFolder)"
+    mat-stroked-button
+    [disabled]="!selectedFolder || selectMode"
+  >
     <mat-icon>edit</mat-icon>
     Edit {{ selectedFolder?.name ?? 'Folder' }}
   </button>
@@ -14,15 +19,23 @@
     *appRole="['admin']"
     (click)="onDeleteFolder(selectedFolder)"
     mat-stroked-button
-    [disabled]="!selectedFolder"
+    [disabled]="!selectedFolder && !selectMode"
   >
     <mat-icon>delete</mat-icon>
-    Delete {{ selectedFolder?.name ?? 'Folder' }}
+    Delete {{ !selectMode ? (selectedFolder?.name ?? 'Folder') : 'Many' }}
   </button>
 
-  <button (click)="onUploadFile(selectedFolder)" mat-stroked-button [disabled]="!selectedFolder">
+  <button
+    (click)="onUploadFile(selectedFolder)"
+    mat-stroked-button
+    [disabled]="!selectedFolder || selectMode"
+  >
     <mat-icon>upload</mat-icon>
     Upload to {{ selectedFolder?.name ?? 'Folder' }}
+  </button>
+
+  <button (click)="onToggleSelectMode()" mat-stroked-button>
+    Select Mode {{ selectMode ? 'On' : 'Off' }}
   </button>
 
   <app-folder-filter class="ms-auto" />

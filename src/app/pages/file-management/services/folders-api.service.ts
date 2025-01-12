@@ -1,17 +1,20 @@
 import { HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { forkJoin, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseApiService } from '../../../core/services/base-api.service';
+import { File } from '../models/file.model';
 import { FolderWithNestedFoldersAndFiles } from '../models/folder-with-nested-folders-and-files.model';
 import { FolderWithNestedFolders } from '../models/folder-with-nested-folders.model';
 import { Folder } from '../models/folder.model';
 import { SearchParams } from '../models/search-params.model';
 import { buildFolderHierarchy } from '../utils/build-folder-hierarchy.fn';
+import { FilesApiService } from './files-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FoldersApiService extends BaseApiService {
+  readonly #fileService = inject(FilesApiService);
   constructor() {
     super();
   }
@@ -108,6 +111,56 @@ export class FoldersApiService extends BaseApiService {
 
   moveFolder(id: string, parentId: string) {
     return this.http.patch<Folder>(`${this.baseUrl}/folders/${id}`, { parentId });
+  }
+
+  batchDeleteFoldersAndFiles(elements: Array<File | Folder>) {
+    const { files, folders } = elements.reduce(
+      (acc, element) => {
+        if ('type' in element) {
+          acc.files.push(element);
+        } else {
+          acc.folders.push(element);
+        }
+        return acc;
+      },
+      { files: [] as File[], folders: [] as Folder[] },
+    );
+
+    const filesObs = files.length
+      ? files.map((file) => this.#fileService.deleteFile(file.id))
+      : [of(void 0)];
+    const foldersObs = folders.length
+      ? folders.map((folder) => this.deleteFolder(folder.id))
+      : [of(void 0)];
+
+    const allRequests = [...foldersObs, ...filesObs];
+
+    return forkJoin(allRequests);
+  }
+
+  batchMoveFoldersAndFiles(elements: Array<File | Folder>, destId: string) {
+    const { files, folders } = elements.reduce(
+      (acc, element) => {
+        if ('type' in element) {
+          acc.files.push(element);
+        } else {
+          acc.folders.push(element);
+        }
+        return acc;
+      },
+      { files: [] as File[], folders: [] as Folder[] },
+    );
+
+    const filesObs = files.length
+      ? files.map((file) => this.#fileService.moveFile(file.id, destId))
+      : [of(void 0)];
+    const foldersObs = folders.length
+      ? folders.map((folder) => this.moveFolder(folder.id, destId))
+      : [of(void 0)];
+
+    const allRequests = [...foldersObs, ...filesObs];
+
+    return forkJoin(allRequests);
   }
 
   searchFolders(query: string) {

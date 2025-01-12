@@ -1,12 +1,12 @@
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTreeModule } from '@angular/material/tree';
-import { FolderWithNestedFolders } from '../../models/folder-with-nested-folders.model';
-import { FileManagerContainerStoreService } from '../../services/file-manager-container-store.service';
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { Folder } from '../../models/folder.model';
 import { File } from '../../models/file.model';
+import { FolderWithNestedFolders } from '../../models/folder-with-nested-folders.model';
+import { Folder } from '../../models/folder.model';
+import { FileManagerContainerStoreService } from '../../services/file-manager-container-store.service';
 
 @Component({
   selector: 'app-folder-tree',
