@@ -8,7 +8,13 @@
         [cdkDragData]="folder"
         class="p-1 align-items-center folder-card"
         (dblclick)="this.selectFolder(folder)"
+        (contextmenu)="onRightClick($event, folder, matMenuTrigger)"
       >
+        <div
+          [matMenuTriggerFor]="menu"
+          #matMenuTrigger="matMenuTrigger"
+          [matMenuTriggerData]="{ $implicit: folder }"
+        ></div>
         <mat-icon>folder</mat-icon>
         <span class="text-center">
           @if (selectMode) {
@@ -26,7 +32,14 @@
         [cdkDragData]="file"
         (dblclick)="openFile(file)"
         class="p-1 align-items-center file-card"
+        (click)="$event.stopImmediatePropagation(); $event.stopPropagation()"
+        (contextmenu)="onRightClick($event, file, matMenuTrigger)"
       >
+        <div
+          [matMenuTriggerFor]="menu"
+          #matMenuTrigger="matMenuTrigger"
+          [matMenuTriggerData]="{ $implicit: file }"
+        ></div>
         <app-file-icon [mimeType]="file.type"></app-file-icon>
         <span class="text-center">
           @if (selectMode) {
@@ -44,3 +57,12 @@
     </div>
   }
 </div>
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-data>
+    <button *appRole="['admin']" (click)="onDeleteFileOrFolder(data)" mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      Delete {{ data?.name }}
+    </button>
+  </ng-template>
+</mat-menu>

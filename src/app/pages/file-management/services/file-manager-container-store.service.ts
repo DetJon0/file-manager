@@ -112,10 +112,28 @@ export class FileManagerContainerStoreService {
           this.#snackBar.open('Folder deleted Successfully', 'Close');
 
           this.folderListResource.update((old) => old?.filter((f) => f.id !== folder.id));
+          this.folderDetailsResource.reload();
           this.#selectedFolder.set(null);
         },
         error: (error) => {
           this.#snackBar.open(error.message ?? 'Failed to delete folder', 'Close');
+        },
+      }),
+    );
+  }
+  deleteFile(file: File) {
+    if (this.selectMode()) {
+      return this.batchDelete();
+    }
+    return this.#fileService.deleteFile(file.id).pipe(
+      tap({
+        next: () => {
+          this.#snackBar.open('File deleted Successfully', 'Close');
+
+          this.folderDetailsResource.reload();
+        },
+        error: (error) => {
+          this.#snackBar.open(error.message ?? 'Failed to delete file', 'Close');
         },
       }),
     );
