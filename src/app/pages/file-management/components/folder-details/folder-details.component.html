@@ -1,7 +1,7 @@
 <div class="row row-gap-2">
   @let selectedFolder = this.folderDetailsResource.value();
   @for (folder of selectedFolder?.folders; track $index) {
-    <div class="col-1">
+    <div class="col-6 col-lg-3 col-xl-2">
       <mat-card class="p-1 align-items-center folder-card" (dblclick)="this.selectFolder(folder)">
         <mat-icon>folder</mat-icon>
         <span class="text-center">
@@ -11,7 +11,7 @@
     </div>
   }
   @for (file of selectedFolder?.files; track $index) {
-    <div class="col-1">
+    <div class="col-6 col-lg-3 col-xl-2">
       <mat-card (click)="openFile(file)" class="p-1 align-items-center file-card">
         <app-file-icon [mimeType]="file.type"></app-file-icon>
         <span class="text-center">
