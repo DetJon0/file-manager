@@ -18,18 +18,11 @@ export class NavbarComponent {
   readonly #dialog = inject(MatDialog);
   readonly activeUser = this.#authService.user;
 
-  menuItems = [
-    {
-      label: 'Home',
-      icon: 'home',
-      link: '/',
-    },
-    {
-      label: 'About',
-      icon: 'info',
-      link: '/about',
-    },
-  ];
+  menuItems: {
+    label: string;
+    icon: string;
+    link: string;
+  }[] = [];
 
   onLogout() {
     const deleteRef = this.#dialog.open(LogoutConfirmDialogComponent, {
